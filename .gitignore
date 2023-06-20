@@ -1,0 +1,18 @@
+# Python
+*.pyc
+*~
+__pycache__
+
+# Env
+.env
+ml_venv/
+venv/
+
+
+#docker-compose -f docker-compose.prod.yml down -v --remove-orphans
+
+#docker-compose -f docker-compose.prod.yml up -d --build
+
+#docker-compose -f docker-compose.prod.yml logs -f
+
+#docker-compose -f docker-compose.prod.yml exec web python manage.py shell

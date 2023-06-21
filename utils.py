@@ -2,6 +2,7 @@ import numpy as np
 import tensorflow as tf
 
 
+
 class WindowGenerator():
   def __init__(self, input_width, label_width, shift,
                train_df=None, val_df=None, test_df=None,

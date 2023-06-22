@@ -49,7 +49,7 @@ def handle_message(topic, payload):
     if dev and range:  
         response=requests.get(url+dev).json()
         df1=pd.DataFrame(response)
-        if len(df1 >= 100):        
+        if len(df1) >= 100:        
             series = df1[['created', 'value']]
 
             series.drop_duplicates(subset='created', inplace=True)

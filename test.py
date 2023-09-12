@@ -13,7 +13,7 @@ url = 'http://209.38.208.230:8000/api/posts/?date_range=year&dev='
 
 broker = "159.89.103.242"  # Replace with your MQTT broker address
 port = 1883  # Replace with the appropriate port
-client_id = "your_client_id_999"  # Replace with your desired client ID
+client_id = "your_client_id_9991"  # Replace with your desired client ID
 mqtt_client = MyMqtt(broker, port, client_id)
 mqtt_client.connect()
 mqtt_client.subscribe("tensor/#")  # Replace with your desired topic
@@ -43,7 +43,8 @@ lstm_model = tf.keras.models.Sequential([
 ])
 #mqtt_client.publish("forecast", "00")
 def handle_message(topic, payload):
-    
+    print(topic)
+    print(payload)
     range = topic.split("/")[1]
     dev = payload[2:-1]
     if dev and range:  
@@ -90,12 +91,13 @@ def handle_message(topic, payload):
             wide_window = WindowGenerator(
             input_width=24, label_width=24, shift=1, train_df = train_df, val_df = val_df, test_df = test_df,
             label_columns=['value'])
-            
+            print("HERE!!!!!")
             history = compile_and_fit(lstm_model, wide_window)
 
             prediction_data = wide_window.make_dataset(test_df)
             predictions = lstm_model.predict(prediction_data)
             predictions_original = (predictions * train_std['value']) + train_mean['value']
+            print(predictions_original)
             
             if range == 'today':            
                 pub_topic = "forecast/"+dev+'/'+range

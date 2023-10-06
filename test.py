@@ -71,7 +71,8 @@ def make_predict(df,home):
     predicted_probability = model.predict(single_data_scaled)
     predicted_class = (predicted_probability >= 0.5).astype(int)
     prediction = predicted_class.item()
-    
+    print(home)
+    print(prediction)
     if prediction == 1:
         pub_topic = "predict/result"
         home_obj = {

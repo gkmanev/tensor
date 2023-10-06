@@ -1,16 +1,16 @@
 import numpy as np
 import pandas as pd
-from keras.layers import *
-from keras.optimizers import *
+# from keras.layers import *
+# from keras.optimizers import *
 import requests
-from utils import WindowGenerator
+#from utils import WindowGenerator
 # from mqtt import MyMqtt
 import paho.mqtt.publish as publish
 from paho.mqtt import client
 #import paho.mqtt.client as mqtt
 from datetime import datetime, timezone, timedelta
 import traceback  # Import the traceback module for detailed error information
-from sklearn.metrics import mean_absolute_error
+# from sklearn.metrics import mean_absolute_error
 import logging
 import json
 import joblib
@@ -24,8 +24,6 @@ port = 1883  # Replace with the appropriate port
 client_id = "your_client_id_9991981"  # Replace with your desired client ID
 keep_alive_interval = 60  # Set the Keep-Alive interval in seconds
 
-client = client.Client()
-client.connect("159.89.103.242", 1883)
 #client.connect_async("159.89.103.242", 1883)
 
 
@@ -41,31 +39,31 @@ def on_connect(client, userdata, flags, rc):
 
 MAX_EPOCHS = 50
 
-def compile_and_fit(model, window, patience=2):
-    try:
-        early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
-                                                        patience=patience,
-                                                        mode='min')
+# def compile_and_fit(model, window, patience=2):
+#     try:
+#         early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
+#                                                         patience=patience,
+#                                                         mode='min')
 
-        model.compile(loss=tf.keras.losses.MeanSquaredError(),
-                    optimizer=tf.keras.optimizers.Adam(),
-                    metrics=[tf.keras.metrics.MeanAbsoluteError()])
+#         model.compile(loss=tf.keras.losses.MeanSquaredError(),
+#                     optimizer=tf.keras.optimizers.Adam(),
+#                     metrics=[tf.keras.metrics.MeanAbsoluteError()])
 
-        history = model.fit(window.train, epochs=MAX_EPOCHS,
-                            validation_data=window.val,
-                            callbacks=[early_stopping])
-        return history
-    except Exception as e:
-        print("Error compiling and fitting model:", str(e))
-        traceback.print_exc()  # Print detailed error information
-        return None  # Return None to indicate failure
+#         history = model.fit(window.train, epochs=MAX_EPOCHS,
+#                             validation_data=window.val,
+#                             callbacks=[early_stopping])
+#         return history
+#     except Exception as e:
+#         print("Error compiling and fitting model:", str(e))
+#         traceback.print_exc()  # Print detailed error information
+#         return None  # Return None to indicate failure
 
-lstm_model = tf.keras.models.Sequential([
-    # Shape [batch, time, features] => [batch, time, lstm_units]
-    tf.keras.layers.LSTM(32, return_sequences=True),
-    # Shape => [batch, time, features]
-    tf.keras.layers.Dense(units=1)
-])
+# lstm_model = tf.keras.models.Sequential([
+#     # Shape [batch, time, features] => [batch, time, lstm_units]
+#     tf.keras.layers.LSTM(32, return_sequences=True),
+#     # Shape => [batch, time, features]
+#     tf.keras.layers.Dense(units=1)
+# ])
 
 def validateJSON(jsonData):
     try:
@@ -74,22 +72,22 @@ def validateJSON(jsonData):
         return False
     return True  
 
-def make_predict(df,home):
-    scaler = joblib.load("fat_scaler.pkl")
-    single_data_scaled = scaler.transform(df)
-    model = tf.keras.models.load_model('fat_model.h5')
-    predicted_probability = model.predict(single_data_scaled)
-    predicted_class = (predicted_probability >= 0.5).astype(int)
-    prediction = predicted_class.item()
-    print(home)
-    print(prediction)
-    if prediction == 1:
-        pub_topic = "predict/result"
-        home_obj = {
-            "home":home
-        }
-        message = json.dumps(home_obj)
-        client.publish(pub_topic, message)
+# def make_predict(df,home):
+#     scaler = joblib.load("fat_scaler.pkl")
+#     single_data_scaled = scaler.transform(df)
+#     model = tf.keras.models.load_model('fat_model.h5')
+#     predicted_probability = model.predict(single_data_scaled)
+#     predicted_class = (predicted_probability >= 0.5).astype(int)
+#     prediction = predicted_class.item()
+#     print(home)
+#     print(prediction)
+#     if prediction == 1:
+#         pub_topic = "predict/result"
+#         home_obj = {
+#             "home":home
+#         }
+#         message = json.dumps(home_obj)
+#         client.publish(pub_topic, message)
 
 def on_message(client, userdata, msg):
     try:
@@ -193,6 +191,10 @@ def on_message(client, userdata, msg):
         print("Error handling message:", str(e))
         traceback.print_exc()  # Print detailed error information
 
+
+
+client = client.Client()
+client.connect("159.89.103.242", 1883)
 client.on_connect = on_connect
 client.on_message = on_message
 client.loop_forever()

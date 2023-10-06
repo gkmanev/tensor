@@ -100,8 +100,9 @@ def on_message(client, userdata, msg):
                 df_single_fin = df_single.drop('home', axis=1)
                 #make_predict(df_single_fin, home) 
        
-        # else:        
-        #     range = topic.split("/")[1]
+        else:        
+            range = topic.split("/")[1]
+            print(range)
         #     dev = msg.payload.decode('utf-8')     
         #     if dev and range:  
         #         response=requests.get(url+dev).json()

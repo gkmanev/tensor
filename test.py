@@ -95,7 +95,7 @@ def on_message(client, userdata, msg):
                 home = df_single['home'].to_string(index=False, header=False)
                 #print(home)
                 df_single_fin = df_single.drop('home', axis=1)
-                make_predict(df_single_fin, home)       
+                # make_predict(df_single_fin, home)       
                 
                 
                 

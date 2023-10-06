@@ -24,6 +24,16 @@ port = 1883  # Replace with the appropriate port
 client_id = "your_client_id_9991981"  # Replace with your desired client ID
 keep_alive_interval = 60  # Set the Keep-Alive interval in seconds
 
+client = client.Client()
+client.connect("159.89.103.242", 1883)
+#client.connect_async("159.89.103.242", 1883)
+
+
+
+
+
+
+
 def on_connect(client, userdata, flags, rc):
     client.subscribe("tensor/#")
     client.subscribe("predict/sing")
@@ -183,11 +193,6 @@ def on_message(client, userdata, msg):
         print("Error handling message:", str(e))
         traceback.print_exc()  # Print detailed error information
 
-client = client.Client()
 client.on_connect = on_connect
 client.on_message = on_message
-
-client.connect("159.89.103.242", 1883)
-#client.connect_async("159.89.103.242", 1883)
-
 client.loop_forever()

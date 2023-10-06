@@ -86,6 +86,8 @@ def on_message(client, userdata, msg):
         topic = msg.topic
         if topic == "predict/single":
             is_valid = validateJSON(msg.payload)
+            print("HERE")
+            print(is_valid)
             if is_valid:
                 data_out=json.loads(msg.payload.decode())
                 

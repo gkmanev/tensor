@@ -26,7 +26,7 @@ keep_alive_interval = 60  # Set the Keep-Alive interval in seconds
 
 def on_connect(client, userdata, flags, rc):
     client.subscribe("tensor/#")
-    client.subscribe("predict/sing")
+    client.subscribe("predict/single")
 
 
 MAX_EPOCHS = 50

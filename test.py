@@ -84,10 +84,11 @@ def make_predict(df,home):
 def on_message(client, userdata, msg):
     try:
         topic = msg.topic
+        print(topic)
         if topic == "predict/single":
             is_valid = validateJSON(msg.payload)
             print("HERE")
-            print(is_valid)
+            
             if is_valid:
                 data_out=json.loads(msg.payload.decode())
                 
@@ -147,7 +148,7 @@ def on_message(client, userdata, msg):
                     wide_window = WindowGenerator(
                     input_width=24, label_width=24, shift=1, train_df = train_df, val_df = val_df, test_df = test_df,
                     label_columns=['value'])
-                    print("HERE!!!!!")
+                    print("There!!!!!")
                     history = compile_and_fit(lstm_model, wide_window)
 
                     if history is not None:

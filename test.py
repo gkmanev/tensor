@@ -1,4 +1,4 @@
-import numpy as np
+# import numpy as np
 import pandas as pd
 from keras.layers import *
 from keras.optimizers import *
@@ -10,7 +10,7 @@ from paho.mqtt import client
 #import paho.mqtt.client as mqtt
 from datetime import datetime, timezone, timedelta
 import traceback  # Import the traceback module for detailed error information
-from sklearn.metrics import mean_absolute_error
+# from sklearn.metrics import mean_absolute_error
 import logging
 import json
 import joblib
@@ -21,7 +21,7 @@ url = 'http://209.38.208.230:8000/api/posts/?date_range=year&dev='
 
 broker = "159.89.103.242"  # Replace with your MQTT broker address
 port = 1883  # Replace with the appropriate port
-client_id = "your_client_id_9991981"  # Replace with your desired client ID
+client_id = "your_cli_id_9991981"  # Replace with your desired client ID
 keep_alive_interval = 60  # Set the Keep-Alive interval in seconds
 
 def on_connect(client, userdata, flags, rc):
@@ -31,31 +31,31 @@ def on_connect(client, userdata, flags, rc):
 
 MAX_EPOCHS = 50
 
-def compile_and_fit(model, window, patience=2):
-    try:
-        early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
-                                                        patience=patience,
-                                                        mode='min')
+# def compile_and_fit(model, window, patience=2):
+#     try:
+#         early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
+#                                                         patience=patience,
+#                                                         mode='min')
 
-        model.compile(loss=tf.keras.losses.MeanSquaredError(),
-                    optimizer=tf.keras.optimizers.Adam(),
-                    metrics=[tf.keras.metrics.MeanAbsoluteError()])
+#         model.compile(loss=tf.keras.losses.MeanSquaredError(),
+#                     optimizer=tf.keras.optimizers.Adam(),
+#                     metrics=[tf.keras.metrics.MeanAbsoluteError()])
 
-        history = model.fit(window.train, epochs=MAX_EPOCHS,
-                            validation_data=window.val,
-                            callbacks=[early_stopping])
-        return history
-    except Exception as e:
-        print("Error compiling and fitting model:", str(e))
-        traceback.print_exc()  # Print detailed error information
-        return None  # Return None to indicate failure
+#         history = model.fit(window.train, epochs=MAX_EPOCHS,
+#                             validation_data=window.val,
+#                             callbacks=[early_stopping])
+#         return history
+#     except Exception as e:
+#         print("Error compiling and fitting model:", str(e))
+#         traceback.print_exc()  # Print detailed error information
+#         return None  # Return None to indicate failure
 
-lstm_model = tf.keras.models.Sequential([
-    # Shape [batch, time, features] => [batch, time, lstm_units]
-    tf.keras.layers.LSTM(32, return_sequences=True),
-    # Shape => [batch, time, features]
-    tf.keras.layers.Dense(units=1)
-])
+# lstm_model = tf.keras.models.Sequential([
+#     # Shape [batch, time, features] => [batch, time, lstm_units]
+#     tf.keras.layers.LSTM(32, return_sequences=True),
+#     # Shape => [batch, time, features]
+#     tf.keras.layers.Dense(units=1)
+# ])
 
 def validateJSON(jsonData):
     try:

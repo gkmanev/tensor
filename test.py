@@ -62,8 +62,9 @@ def validateJSON(jsonData):
         json.loads(jsonData)
     except ValueError as err:
         return False
-    return True  
-
+    return True
+  
+@tf.function
 def make_predict(df,home):
     scaler = joblib.load("fat_scaler.pkl")
     single_data_scaled = scaler.transform(df)

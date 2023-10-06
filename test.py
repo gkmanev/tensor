@@ -85,6 +85,7 @@ def make_predict(df,home):
 def on_message(client, userdata, msg):
     try:
         topic = msg.topic
+        print(topic)
         if topic == "predict/single":
             is_valid = validateJSON(msg.payload)
             print("HERE")

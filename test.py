@@ -64,7 +64,7 @@ def validateJSON(jsonData):
         return False
     return True  
 
-def make_predict(df,home):
+def make_predict(df,home, fav):
     scaler = joblib.load("fat_scaler.pkl")
     single_data_scaled = scaler.transform(df)
     model = tf.keras.models.load_model('fat_model.h5')
@@ -76,7 +76,8 @@ def make_predict(df,home):
     if prediction == 1:
         pub_topic = "predict/result"
         home_obj = {
-            "home":home
+            "home":home,
+            "fav":fav
         }
         message = json.dumps(home_obj)
         client.publish(pub_topic, message)
@@ -94,9 +95,11 @@ def on_message(client, userdata, msg):
                 
                 df_single = pd.DataFrame([data_out])                
                 home = df_single['home'].to_string(index=False, header=False)
-                
-                df_single_fin = df_single.drop('home', axis=1)
-                make_predict(df_single_fin, home)       
+                fav = df_single['fav'].to_string(index=False, header=False)
+                columns_to_remove = ["fav","home"]
+                df_single_fin = df_single_fin.drop(columns=columns_to_remove)
+
+                make_predict(df_single_fin, home, fav)       
                 
                 
                 

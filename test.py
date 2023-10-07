@@ -97,8 +97,7 @@ def on_message(client, userdata, msg):
                 home = df_single['home'].to_string(index=False, header=False)
                 fav = df_single['fav'].to_string(index=False, header=False)
                 columns_to_remove = ["fav","home"]
-                df_single_fin = df_single_fin.drop(columns=columns_to_remove)
-
+                df_single_fin = df_single.drop(columns=columns_to_remove)
                 make_predict(df_single_fin, home, fav)       
                 
                 

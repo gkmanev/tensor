@@ -27,6 +27,7 @@ keep_alive_interval = 60  # Set the Keep-Alive interval in seconds
 def on_connect(client, userdata, flags, rc):
     client.subscribe("tensor/#")
     client.subscribe("predict/single")
+    client.subscribe("predict/full")
 
 
 MAX_EPOCHS = 50
@@ -64,6 +65,27 @@ def validateJSON(jsonData):
         return False
     return True  
 
+
+def make_predict_full(df,home,fav,oddA):
+    scaler = joblib.load("full_scaler.pkl")
+    single_data_full_scaled = scaler.transform(df)
+    model = tf.keras.models.load_model('full_model.h5')
+    predicted_probability_full = model.predict(single_data_full_scaled)
+    predicted_class_full = (predicted_probability_full >= 0.6).astype(int)
+    prediction_full = predicted_class_full.item()
+    if prediction_full == 1:
+        pub_topic = "predict/resultfull"
+        home_obj_full = {
+            "home":home,
+            "fav":fav,
+            "oddA":oddA
+        }
+        message = json.dumps(home_obj_full)
+        client.publish(pub_topic, message)
+
+
+
+
 def make_predict(df,home, fav):
     scaler = joblib.load("fat_scaler.pkl")
     single_data_scaled = scaler.transform(df)
@@ -98,11 +120,20 @@ def on_message(client, userdata, msg):
                 fav = df_single['fav'].to_string(index=False, header=False)
                 columns_to_remove = ["fav","home"]
                 df_single_fin = df_single.drop(columns=columns_to_remove)
-                make_predict(df_single_fin, home, fav)       
-                
-                
-                
-        else:        
+                make_predict(df_single_fin, home, fav)    
+        if topic == "predict/full":
+            is_valid_full = validateJSON(msg.payload)
+            if is_valid_full:
+                data_out_full=json.loads(msg.payload.decode())                
+                df_single_full = pd.DataFrame([data_out_full])    
+                home_full = df_single_full['home'].to_string(index=False, header=False)
+                fav_full = df_single_full['fav'].to_string(index=False, header=False)
+                oddA = df_single_full['liveA'].to_string(index=False, header=False)
+                columns_to_remove_full = ["fav","home"]
+                df_single_full_fin = df_single.drop(columns=columns_to_remove_full)
+                make_predict_full(df_single_full_fin, home_full, fav_full, oddA)
+                   
+        if topic == "tensor/#":      
             range = topic.split("/")[1]
             print(range)
             dev = msg.payload.decode('utf-8')     

@@ -67,9 +67,9 @@ def validateJSON(jsonData):
 
 
 def make_predict_full(df,home,fav,oddA):
-    scaler = joblib.load("full_scaler.pkl")
+    scaler = joblib.load("18-full_scaler.pkl")
     single_data_full_scaled = scaler.transform(df)
-    model = tf.keras.models.load_model('full_model.h5')
+    model = tf.keras.models.load_model('18-full_model.h5')
     predicted_probability_full = model.predict(single_data_full_scaled)
     predicted_class_full = (predicted_probability_full >= 0.6).astype(int)
     prediction_full = predicted_class_full.item()
@@ -129,9 +129,15 @@ def on_message(client, userdata, msg):
                 home_full = df_single_full['home'].to_string(index=False, header=False)
                 fav_full = df_single_full['fav'].to_string(index=False, header=False)
                 oddA = df_single_full['liveA'].to_string(index=False, header=False)
+                oddB = df_single_full['liveB'].to_string(index=False, header=False)
+                odd = 0
+                if fav_full == 'home':
+                    odd = oddA
+                else:
+                    odd = oddB
                 columns_to_remove_full = ["fav","home"]
-                df_single_full_fin = df_single.drop(columns=columns_to_remove_full)
-                make_predict_full(df_single_full_fin, home_full, fav_full, oddA)
+                df_single_full_fin = df_single_full.drop(columns=columns_to_remove_full)
+                make_predict_full(df_single_full_fin, home_full, fav_full, odd)
                    
         if topic == "tensor/#":      
             range = topic.split("/")[1]

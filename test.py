@@ -67,11 +67,11 @@ def validateJSON(jsonData):
 
 
 def make_predict_full(df,home,fav,oddA):
-    scaler = joblib.load("18-full_scaler.pkl")
+    scaler = joblib.load("full_scaler.pkl")
     single_data_full_scaled = scaler.transform(df)
-    model = tf.keras.models.load_model('18-full_model.h5')
+    model = tf.keras.models.load_model('full_model.h5')
     predicted_probability_full = model.predict(single_data_full_scaled)
-    predicted_class_full = (predicted_probability_full >= 0.6).astype(int)
+    predicted_class_full = (predicted_probability_full >= 0.55).astype(int)
     prediction_full = predicted_class_full.item()
     if prediction_full == 1:
         pub_topic = "predict/resultfull"

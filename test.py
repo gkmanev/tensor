@@ -21,11 +21,11 @@ url = 'http://209.38.208.230:8000/api/posts/?date_range=year&dev='
 
 broker = "159.89.103.242"  # Replace with your MQTT broker address
 port = 1883  # Replace with the appropriate port
-client_id = "your_client_id_9991981"  # Replace with your desired client ID
+client_id = "your_client_id_9991c81"  # Replace with your desired client ID
 keep_alive_interval = 60  # Set the Keep-Alive interval in seconds
 
 def on_connect(client, userdata, flags, rc):
-    client.subscribe("tensor/#")
+    client.subscribe("tensor/today")
     client.subscribe("predict/single")
     client.subscribe("predict/full")
 
@@ -107,7 +107,7 @@ def validateJSON(jsonData):
 def on_message(client, userdata, msg):
     try:
         topic = msg.topic
-        
+        print(topic)
         # if topic == "predict/single":
         #     is_valid = validateJSON(msg.payload)
             
@@ -139,13 +139,15 @@ def on_message(client, userdata, msg):
         #         df_single_full_fin = df_single_full.drop(columns=columns_to_remove_full)
         #         make_predict_full(df_single_full_fin, home_full, fav_full, odd)
                    
-        if topic == "tensor/#":      
+        if topic == "tensor/today":   
+            print("HERE!!!!")   
             range = topic.split("/")[1]
-            print(range)
             dev = msg.payload.decode('utf-8')     
+            print(f"{range} dev:{dev}")
             if dev and range:  
                 response=requests.get(url+dev).json()
                 df1=pd.DataFrame(response)
+                print(len(df1))
                 
                 if len(df1) >= 100:        
                     series = df1[['created', 'value']]

@@ -17,7 +17,7 @@ import joblib
 
 # logging.basicConfig(level=logging.DEBUG)
 
-url = 'http://209.38.208.230:8000/api/posts/?date_range=year&dev='
+url = 'http://209.38.208.230:8000/api/posts/?date_range=year&not_res=true&dev='
 
 broker = "159.89.103.242"  # Replace with your MQTT broker address
 port = 1883  # Replace with the appropriate port

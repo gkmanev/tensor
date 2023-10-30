@@ -78,6 +78,7 @@ class WindowGenerator():
   
   def make_dataset(self, data):
     data = np.array(data, dtype=np.float32)
+    print("Data shape before creating the dataset:", data.shape)
     ds = tf.keras.utils.timeseries_dataset_from_array(
         data=data,
         targets=None,
@@ -85,8 +86,10 @@ class WindowGenerator():
         sequence_stride=1,
         shuffle=True,
         batch_size=32,)
-
+    
+    print("Dataset created:", ds)
     ds = ds.map(self.split_window)
+    print("Dataset after mapping:", ds)
 
     return ds 
 
